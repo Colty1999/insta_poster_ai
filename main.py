@@ -1,5 +1,6 @@
 import os
 import random
+import re
 import requests
 from dotenv import load_dotenv
 import openai
@@ -57,7 +58,7 @@ if __name__ == "__main__":
         f"""
             Jesteś doświadczonym copywriterem tworzącym posty na Instagram dla marek lifestyle i zdrowia.
 
-            Napisz krótki, angażujący post na temat: "{topic}", który przyciągnie uwagę od pierwszego zdania i zainteresuje szeroką grupę odbiorców. 
+            Napisz krótki, angażujący post na temat: "{topic}", który przyciągnie uwagę od pierwszego zdania i zainteresuje szeroką grupę odbiorców.
 
             Post powinien być:
             - profesjonalny, naturalny i ekspercki,
@@ -123,7 +124,7 @@ if __name__ == "__main__":
     ]
     caption = generate_text(random.choice(post_promts))
     image_prompt = f"A minimalist digital illustration of a {topic}. The background is a soft pale yellow color (#fefae0), flat and uniform. The dominant color of the fruit and bowl should be a muted sage green tone (#ccd5ae), used prominently throughout the composition. No text, no writing, just the image. Clean, modern design with a balanced color palette."
-    image_path = f"images/{topic}_{datetime.today().strftime('%Y-%m-%d')}.jpg"
+    image_path = f"images/{re.sub(r'[<>:"/\\|?*\r\n]', '', topic)}_{datetime.today().strftime('%Y-%m-%d')}.jpg"
 
     generate_image(image_prompt, image_path)
     post_to_instagram(image_path, caption)
