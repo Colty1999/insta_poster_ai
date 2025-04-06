@@ -34,7 +34,7 @@ jobs:
 
     - name: Upload image as artifact (optional)
       if: success()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: instagram-image
         path: images/
