@@ -25,9 +25,9 @@ jobs:
 
     - name: Run Instagram Post Script
       run: |
-        export OPENAI_API_KEY = "${{ secrets.OPENAI_API_KEY }}"
-        export INSTAGRAM_USERNAME = "${{ secrets.INSTAGRAM_USERNAME }}"
-        export INSTAGRAM_PASSWORD = "${{ secrets.INSTAGRAM_PASSWORD }}"
+        export OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}"
+        export INSTAGRAM_USERNAME="${{ secrets.INSTAGRAM_USERNAME }}"
+        export INSTAGRAM_PASSWORD="${{ secrets.INSTAGRAM_PASSWORD }}"
         python main.py
 
     - name: Upload image as artifact (optional)
