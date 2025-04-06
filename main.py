@@ -123,7 +123,7 @@ if __name__ == "__main__":
         """
     ]
     caption = generate_text(random.choice(post_promts))
-    image_prompt = f"A minimalist digital illustration of a {topic}. The background is a soft pale yellow color (#fefae0), flat and uniform. The dominant color of the fruit and bowl should be a muted sage green tone (#ccd5ae), used prominently throughout the composition. No text, no writing, just the image. Clean, modern design with a balanced color palette."
+    image_prompt = f"A minimalist digital illustration of a {topic}. The background is a soft pale yellow color (#fefae0), flat and uniform. The dominant color of the image should be a muted sage green tone (#ccd5ae), used prominently throughout the composition. Clean, modern design with a balanced color palette."  # No text, no writing, just the image.
     sanitized_topic = re.sub(r'[<>:"/\\|?*\r\n]', '', topic)
     image_path = f"images/{sanitized_topic}_{datetime.today().strftime('%Y-%m-%d')}.jpg"
 
