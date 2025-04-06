@@ -1,0 +1,40 @@
+name: Daily Instagram Post
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * *'  # codziennie o 12:00 UTC
+
+jobs:
+  post_to_instagram:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Create .env file
+      run: |
+        echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
+        echo "INSTAGRAM_USERNAME=${{ secrets.INSTAGRAM_USERNAME }}" >> .env
+        echo "INSTAGRAM_PASSWORD=${{ secrets.INSTAGRAM_PASSWORD }}" >> .env
+
+    - name: Run Instagram Post Script
+      run: python post_generator.py
+
+    - name: Upload image as artifact (optional)
+      if: success()
+      uses: actions/upload-artifact@v3
+      with:
+        name: instagram-image
+        path: images/
