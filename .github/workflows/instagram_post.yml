@@ -23,12 +23,14 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run Instagram Post Script
+    - name: Create .env file
       run: |
-        export OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}"
-        export INSTAGRAM_USERNAME="${{ secrets.INSTAGRAM_USERNAME }}"
-        export INSTAGRAM_PASSWORD="${{ secrets.INSTAGRAM_PASSWORD }}"
-        python main.py
+        echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
+        echo "INSTAGRAM_USERNAME=${{ secrets.INSTAGRAM_USERNAME }}" >> .env
+        echo "INSTAGRAM_PASSWORD=${{ secrets.INSTAGRAM_PASSWORD }}" >> .env
+
+    - name: Run Instagram Post Script
+      run: python main.py
 
     - name: Upload image as artifact (optional)
       if: success()
