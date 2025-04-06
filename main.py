@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import openai
 from instagrapi import Client
 from datetime import datetime
+from instagram_login_challanger import challenge_code_handler
 
 load_dotenv()
 
@@ -44,6 +45,8 @@ def generate_image(prompt, output_path):
 
 def post_to_instagram(image_path, caption):
     cl = Client()
+    cl = Client()
+    cl.challenge_code_handler = challenge_code_handler
     cl.login(insta_username, insta_password)
     cl.photo_upload(image_path, caption)
 
