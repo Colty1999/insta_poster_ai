@@ -29,6 +29,10 @@ jobs:
         echo "INSTAGRAM_USERNAME=${{ secrets.INSTAGRAM_USERNAME }}" >> .env
         echo "INSTAGRAM_PASSWORD=${{ secrets.INSTAGRAM_PASSWORD }}" >> .env
 
+        echo "OPENAI_API_KEY is set"
+        echo "INSTAGRAM_USERNAME is set"
+        echo "INSTAGRAM_PASSWORD is set"
+
     - name: Run Instagram Post Script
       run: python main.py
 
