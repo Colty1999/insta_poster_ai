@@ -28,6 +28,8 @@ jobs:
         echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
         echo "INSTAGRAM_USERNAME=${{ secrets.INSTAGRAM_USERNAME }}" >> .env
         echo "INSTAGRAM_PASSWORD=${{ secrets.INSTAGRAM_PASSWORD }}" >> .env
+        echo "CHALLENGE_EMAIL=${{ secrets.CHALLENGE_EMAIL }}" >> .env
+        echo "CHALLENGE_PASSWORD=${{ secrets.CHALLENGE_PASSWORD }}" >> .env
 
     - name: Run Instagram Post Script
       run: python main.py
