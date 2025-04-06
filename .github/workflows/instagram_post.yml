@@ -30,11 +30,11 @@ jobs:
         echo "INSTAGRAM_PASSWORD=${{ secrets.INSTAGRAM_PASSWORD }}" >> .env
 
     - name: Run Instagram Post Script
-      run: python post_generator.py
+      run: python main.py
 
     - name: Upload image as artifact (optional)
       if: success()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: instagram-image
         path: images/
