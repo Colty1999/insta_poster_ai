@@ -24,11 +24,11 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run Instagram Post Script
-      env:
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        INSTAGRAM_USERNAME: ${{ secrets.INSTAGRAM_USERNAME }}
-        INSTAGRAM_PASSWORD: ${{ secrets.INSTAGRAM_PASSWORD }}
-      run: python main.py
+      run: |
+        export OPENAI_API_KEY = "${{ secrets.OPENAI_API_KEY }}"
+        export INSTAGRAM_USERNAME = "${{ secrets.INSTAGRAM_USERNAME }}"
+        export INSTAGRAM_PASSWORD = "${{ secrets.INSTAGRAM_PASSWORD }}"
+        python main.py
 
     - name: Upload image as artifact (optional)
       if: success()
