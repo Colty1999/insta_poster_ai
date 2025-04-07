@@ -1,15 +1,13 @@
 import os
-import random
 from datetime import datetime
 import re
-from typing import List
 import requests
 from dotenv import load_dotenv
 import openai
 from instagrapi import Client
 from helpers import create_story_image
 from instagram_login_challanger import challenge_code_handler
-from instagrapi.types import StoryLink, StorySticker, StoryStickerLink
+from instagrapi.types import StoryLink
 
 load_dotenv()
 
@@ -103,7 +101,7 @@ if __name__ == "__main__":
     """
     caption = generate_text(post_promt)
     print("Generated caption:", topic, "/n", caption)
-    image_prompt = f"A minimalist digital illustration of a {topic}. The background is a soft pale yellow color (#fefae0), flat and uniform. Clean, modern design with a balanced color palette."  # No text, no writing, just the image.
+    image_prompt = f"A minimalist digital illustration of a {topic}. The background is a soft pale yellow color (#fefae0), with subtle gradients that give the effect of light falling from the left side. The illustration includes soft, natural shadows to add depth and dimension, with varying tones to give a sense of perspective. Smooth, textured surfaces create a sense of realism and richness. The design is clean and modern with a balanced color palette, incorporating light reflections and soft highlights to add volume and depth to the shapes."
     sanitized_topic = re.sub(r'[<>:"/\\|?*\r\n]', '', topic)
     image_path = f"images/{sanitized_topic}_{datetime.today().strftime('%Y-%m-%d')}.jpg"
     generate_image(image_prompt, image_path)
@@ -112,6 +110,6 @@ if __name__ == "__main__":
     client.challenge_code_handler = challenge_code_handler
     client.login(insta_username, insta_password)
     # client.dump_settings("session.json")
-    post_to_instagram(client, image_path, f"{caption} #inteligentnadieta")
+    post_to_instagram(client, image_path, f"{caption} #InteligentnaDieta")
     post_story_with_newest_post(client)
     client.logout()
