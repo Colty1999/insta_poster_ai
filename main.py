@@ -18,14 +18,14 @@ insta_password = os.getenv("INSTAGRAM_PASSWORD")
 client = openai.OpenAI()
 
 
-def generate_text(prompt):
+def generate_text(prompt, temperature=0.8):
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
             {"role": "user", "content": prompt}
         ],
         max_tokens=400,
-        temperature=1.0,
+        temperature=temperature,
     )
     return response.choices[0].message.content
 
@@ -73,9 +73,10 @@ def post_story_with_newest_post(client: Client):
 
 
 if __name__ == "__main__":
-    topic = generate_text('''
+    topic_prompt = '''
         Wygeneruj konkretny, specjalistycznie brzmiący temat posta na Instagramie (maks. 5 słów) dotyczący zdrowego odżywiania. Temat ma być unikalny, oparty na faktach, interesujący dla świadomego odbiorcy i brzmieć jak od eksperta. Unikaj ogólników typu ‘zdrowa dieta’ czy ‘zdrowe śniadanie’. Przykłady: ‘Wpływ omega-3 na mózg’, ‘Rola błonnika w mikrobiomie’, ‘Czy gluten szkodzi każdemu?’, ‘Mit detoksów sokowych obalony’.
-    ''')
+    '''
+    topic = generate_text(topic_prompt, temperature=1.0)
     post_promt = f"""
         Jesteś doświadczonym copywriterem tworzącym angażujące posty na Instagram dla marek z branży zdrowia i lifestyle.
 
