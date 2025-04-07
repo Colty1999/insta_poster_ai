@@ -1,12 +1,15 @@
 import os
 import random
+from datetime import datetime
 import re
+from typing import List
 import requests
 from dotenv import load_dotenv
 import openai
 from instagrapi import Client
-from datetime import datetime
+from helpers import create_story_image
 from instagram_login_challanger import challenge_code_handler
+from instagrapi.types import StoryLink, StorySticker, StoryStickerLink
 
 load_dotenv()
 
@@ -24,7 +27,7 @@ def generate_text(prompt):
             {"role": "user", "content": prompt}
         ],
         max_tokens=400,
-        temperature=0.8,
+        temperature=1.0,
     )
     return response.choices[0].message.content
 
@@ -44,89 +47,71 @@ def generate_image(prompt, output_path):
     return output_path
 
 
-def post_to_instagram(image_path, caption):
-    cl = Client()
-    cl = Client()
-    cl.challenge_code_handler = challenge_code_handler
-    cl.login(insta_username, insta_password)
-    cl.photo_upload(image_path, caption)
+def post_to_instagram(client: Client, image_path, caption):
+    client.photo_upload(image_path, caption)
+    print("Posted:", caption)
+
+
+def post_story_with_newest_post(client: Client):
+    feed = client.user_medias(client.user_id, 1)  # Get the most recent post
+    if not feed:
+        print("No posts found in your feed.")
+        return
+    newest_post = feed[0]
+    media_url = newest_post.image_versions2['candidates'][0]['url']
+
+    post_url = f"https://www.instagram.com/p/{newest_post.code}/"
+    caption = "Sprawdźcie nowy post! 😍🎉"
+
+    media_path = create_story_image(client.photo_download_by_url(media_url, "newest_post"))
+
+    client.photo_upload_to_story(
+        media_path,
+        caption=caption,
+        links=[StoryLink(webUri=post_url)],
+    )
+
+    print("Newest post shared as story with caption and emojis!")
 
 
 if __name__ == "__main__":
-    topic = generate_text("Wygeneruj losowy temat z zakresu zdrowego odzywiania ktory mozna przedstawic w formie postu na instagarmie. Max 5 słów.")
-    post_promts = [
-        f"""
-            Jesteś doświadczonym copywriterem tworzącym posty na Instagram dla marek lifestyle i zdrowia.
+    topic = generate_text('''
+        Wygeneruj konkretny, specjalistycznie brzmiący temat posta na Instagramie (maks. 5 słów) dotyczący zdrowego odżywiania. Temat ma być unikalny, oparty na faktach, interesujący dla świadomego odbiorcy i brzmieć jak od eksperta. Unikaj ogólników typu ‘zdrowa dieta’ czy ‘zdrowe śniadanie’. Przykłady: ‘Wpływ omega-3 na mózg’, ‘Rola błonnika w mikrobiomie’, ‘Czy gluten szkodzi każdemu?’, ‘Mit detoksów sokowych obalony’.
+    ''')
+    post_promt = f"""
+        Jesteś doświadczonym copywriterem tworzącym angażujące posty na Instagram dla marek z branży zdrowia i lifestyle.
 
-            Napisz krótki, angażujący post na temat: "{topic}", który przyciągnie uwagę od pierwszego zdania i zainteresuje szeroką grupę odbiorców.
+        Napisz krótki post na temat: „{topic}”, który:
 
-            Post powinien być:
-            - profesjonalny, naturalny i ekspercki,
-            - przyjazny i ludzki w tonie,
-            - zawierać konkretną wartość (np. listę z myślnikami),
-            - z wyważonym użyciem emoji,
-            - maksymalnie 600 znaków (bez liczenia hasztagów).
+            od razu przyciąga uwagę nietypowym, ale naturalnym pierwszym zdaniem,
 
-            Dodaj też 2–3 trafne hasztagi na końcu (oddzielnie). Nie zaczynaj posta od „Oto” ani „Poznaj”. Zadbaj o lekkość języka i unikanie powtórzeń.
-        """,
-        f"""
-            Jesteś doświadczonym copywriterem specjalizującym się w tworzeniu inspirujących treści na Instagram dla marek zajmujących się zdrowiem, wellness i stylem życia.
+            wnosi konkretną, mniej oczywistą wartość lub ciekawostkę,
 
-            Napisz krótki, interesujący post na temat: "{topic}", który zainteresuje szeroką grupę odbiorców. Post ma być:
-            - profesjonalny, ale jednocześnie pełen pasji,
-            - pełen wartościowych wskazówek,
-            - użyj kilku emoji, aby podkreślić kluczowe informacje, ale nie przesadzaj,
-            - maksymalnie 400 znaków,
-            - zakończ post prostym, angażującym wezwaniem do działania (np. zapraszając do komentowania).
+            unika utartych fraz i ogólników (np. „warto dbać o zdrowie”),
 
-            Dodaj 3 trafne hasztagi.
-        """,
-        f"""
-            Jako kreatywny copywriter, którego celem jest angażowanie i bawić odbiorców, napisz energiczny i lekki post na temat: "{topic}".
-            Post ma być:
-            - pełen entuzjazmu i pozytywnej energii,
-            - zawierać przyjazny ton i delikatny humor,
-            - być angażujący, zachęcający do interakcji,
-            - wpleciony w wartościową treść z użyciem kilku dobrze dobranych emoji,
-            - maksymalnie 400 znaków.
-            Zakończ post pytaniem do odbiorców, które pobudzi rozmowę.
-            Dodaj 3 odpowiednie hasztagi.
-        """,
-        f"""
-            Jesteś specjalistą od tworzenia wartościowych treści edukacyjnych na Instagramie. Napisz post na temat: "{topic}", który:
-            - ma na celu edukować odbiorców w przystępny sposób,
-            - zawiera konkretne porady lub ciekawostki,
-            - używa zwięzłego języka, ale jest rzetelny,
-            - nie zapomnij o kilku emoji, które podkreślą kluczowe punkty,
-            - zmieści się w 400 znakach.
-            Podsumuj post krótką, inspirującą myśl, która zachęci do refleksji.
-            Dodaj 3 odpowiednie hasztagi.
-        """,
-        f"""
-            Tworzysz treści na Instagramie, które mają na celu budowanie relacji z odbiorcami. Napisz post na temat: "{topic}", który:
-            - będzie ciepły i osobisty, jak rozmowa z przyjacielem,
-            - wykorzysta ludzki ton i autentyczność,
-            - zaprezentuje temat w sposób, który porusza emocje i angażuje,
-            - zawiera wartościową informację z odpowiednią liczbą emoji,
-            - nie przekroczy 400 znaków.
-            Zakończ post pytaniem do odbiorców, które skłoni ich do dyskusji.
-            Dodaj 3 trafne hasztagi.
-        """,
-        f"""
-            Jesteś copywriterem, który tworzy eleganckie, estetyczne treści na Instagramie. Napisz post na temat: "{topic}", który:
-            - zachwyci odbiorców zarówno treścią, jak i estetycznym stylem,
-            - będzie elegancki, ale przystępny,
-            - użyje subtelnych emoji w sposób, który wzbogaci przekaz,
-            - zmieści się w 400 znakach,
-            - zakończy inspirującym stwierdzeniem.
-            Dodaj 3 eleganckie hasztagi.
-        """
-    ]
-    caption = generate_text(random.choice(post_promts))
+            jest profesjonalny, ale ludzki i przystępny,
+
+            zawiera wyważoną listę (np. 2–4 punktów) z konkretnymi informacjami,
+
+            korzysta z emoji tylko tam, gdzie naturalnie wspierają przekaz (nie dekoracyjnie),
+
+            ma maksymalnie 600 znaków (bez hasztagów),
+
+            nie zaczyna się od słów „Oto” ani „Poznaj”.
+
+        Dodaj na końcu 2–3 trafne, ale niebanalne hasztagi (osobno).
+    """
+    caption = generate_text(post_promt)
+    print("Generated caption:", topic, "/n", caption)
     image_prompt = f"A minimalist digital illustration of a {topic}. The background is a soft pale yellow color (#fefae0), flat and uniform. The dominant color of the image should be a muted sage green tone (#ccd5ae), used prominently throughout the composition. Clean, modern design with a balanced color palette."  # No text, no writing, just the image.
     sanitized_topic = re.sub(r'[<>:"/\\|?*\r\n]', '', topic)
     image_path = f"images/{sanitized_topic}_{datetime.today().strftime('%Y-%m-%d')}.jpg"
-
     generate_image(image_prompt, image_path)
-    post_to_instagram(image_path, caption)
-    print("Posted:", caption)
+
+    client = Client()
+    client.challenge_code_handler = challenge_code_handler
+    client.login(insta_username, insta_password)
+    # client.dump_settings("session.json")
+    post_to_instagram(client, image_path, f"{caption} #inteligentnadieta")
+    post_story_with_newest_post(client)
+    client.logout()
