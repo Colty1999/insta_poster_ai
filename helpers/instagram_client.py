@@ -1,4 +1,6 @@
+import json
 import os
+from typing import Dict
 from dotenv import load_dotenv
 from helpers.story_image_generator import create_story_image
 from helpers.instagram_login_challanger import challenge_code_handler
@@ -14,14 +16,19 @@ class InstagramClient:
 
         self.client = Client()
         self.client.challenge_code_handler = challenge_code_handler
-        self.client.login(self.username, self.password)
-        print(f"Logged in as {self.username}")
+        # self.client.login(self.username, self.password)
+        # print(f"Logged in as {self.username}")
+        instagram_session = json.loads(os.getenv("INSTAGRAM_SESSION"))
+        self.client.set_settings(instagram_session)
 
     def dump_settings(self, filename: str):
         self.client.dump_settings(filename)
 
     def load_settings(self, filename: str):
         self.client.load_settings(filename)
+
+    def set_settings(self, settings: Dict):
+        self.client.set_settings(settings)
 
     def post_to_feed(self, image_path: str, caption: str):
         self.client.photo_upload(image_path, caption)
@@ -66,7 +73,3 @@ class InstagramClient:
             print("No users found.")
             return
         return users
-
-    def __del__(self):
-        self.client.logout()
-        print(f"Logged out from {self.username}")

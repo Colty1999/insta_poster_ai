@@ -31,6 +31,7 @@ jobs:
         echo "INSTAGRAM_PASSWORD=${{ secrets.INSTAGRAM_PASSWORD }}" >> .env
         echo "CHALLENGE_EMAIL=${{ secrets.CHALLENGE_EMAIL }}" >> .env
         echo "CHALLENGE_PASSWORD=${{ secrets.CHALLENGE_PASSWORD }}" >> .env
+        echo "INSTAGRAM_SESSION=${{ secrets.INSTAGRAM_SESSION }}" >> .env
 
     - name: Run Instagram Comment Script
       run: python instagram_add_comment.py
