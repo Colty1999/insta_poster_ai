@@ -3,7 +3,8 @@ name: Daily Instagram Post
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 10 * * *'  # codziennie o 10:00 UTC
+    - cron: '0 12 * * *'  # codziennie o 12:00 UTC
+    - cron: '0 18 * * *'  # codziennie o 18:00 UTC
 
 jobs:
   post_to_instagram:
@@ -31,8 +32,8 @@ jobs:
         echo "CHALLENGE_EMAIL=${{ secrets.CHALLENGE_EMAIL }}" >> .env
         echo "CHALLENGE_PASSWORD=${{ secrets.CHALLENGE_PASSWORD }}" >> .env
 
-    - name: Run Instagram Post Script
-      run: python instagram_add_post.py
+    - name: Run Instagram Comment Script
+      run: python instagram_add_comment.py
 
     - name: Upload image as artifact (optional)
       if: success()
