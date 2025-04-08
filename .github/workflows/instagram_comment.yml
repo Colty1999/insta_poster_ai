@@ -1,4 +1,4 @@
-name: Daily Instagram Post
+name: Instagram Comment
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ on:
     - cron: '0 18 * * *'  # codziennie o 18:00 UTC
 
 jobs:
-  post_to_instagram:
+  comment_random_instagram_post:
     runs-on: ubuntu-latest
 
     steps:
