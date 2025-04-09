@@ -7,9 +7,9 @@ from helpers.instagram_client import InstagramClient
 if __name__ == "__main__":
     openai_client = OpenAIClient()
     topic_prompt = '''
-        Wygeneruj konkretny, specjalistycznie brzmiący temat posta na Instagramie (maks. 5 słów) dotyczący zdrowego odżywiania. Temat ma być unikalny, oparty na faktach, interesujący dla świadomego odbiorcy i brzmieć jak od eksperta. Unikaj ogólników typu ‘zdrowa dieta’ czy ‘zdrowe śniadanie’. Przykłady: ‘Wpływ omega-3 na mózg’, ‘Rola błonnika w mikrobiomie’, ‘Czy gluten szkodzi każdemu?’, ‘Mit detoksów sokowych obalony’.
+Wygeneruj unikalny, ekspercki temat posta na Instagramie (maks. 5 słów) dotyczący zdrowego odżywiania. Temat musi być konkretny, oparty na aktualnych badaniach i brzmieć jak od specjalisty z zakresu dietetyki lub medycyny. Unikaj ogólników (np. ‘zdrowa dieta’, ‘fit śniadanie’). Skup się na mniej oczywistych, ale merytorycznych aspektach żywienia, które zaciekawią świadomego odbiorcę. Styl: rzeczowy, naukowy, angażujący. Przykłady: ‘Wpływ omega-3 na mózg’, ‘Rola błonnika w mikrobiomie’, ‘Czy gluten szkodzi każdemu?’, ‘Mit detoksów sokowych obalony’, ‘Związek snu z insulinowrażliwością’.
     '''
-    topic = openai_client.generate_text(topic_prompt, temperature=1.5)
+    topic = openai_client.generate_text(topic_prompt, temperature=1.2)
     print("Generated topic:", topic)
     caption_promt = f"""
         Jesteś doświadczonym copywriterem tworzącym angażujące posty na Instagram dla marek z branży zdrowia i lifestyle.
