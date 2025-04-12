@@ -5,6 +5,7 @@ from helpers.instagram_client import InstagramClient
 
 
 if __name__ == "__main__":
+    instagram_client = InstagramClient()
     openai_client = OpenAIClient()
     topic_prompt = '''
 Wygeneruj unikalny, ekspercki temat posta na Instagramie (maks. 5 słów) dotyczący zdrowego odżywiania. Temat musi być konkretny, oparty na aktualnych badaniach i brzmieć jak od specjalisty z zakresu dietetyki lub medycyny. Unikaj ogólników (np. ‘zdrowa dieta’, ‘fit śniadanie’). Skup się na mniej oczywistych, ale merytorycznych aspektach żywienia, które zaciekawią świadomego odbiorcę. Styl: rzeczowy, naukowy, angażujący. Przykłady: ‘Wpływ omega-3 na mózg’, ‘Rola błonnika w mikrobiomie’, ‘Czy gluten szkodzi każdemu?’, ‘Mit detoksów sokowych obalony’, ‘Związek snu z insulinowrażliwością’.
@@ -44,6 +45,5 @@ Wygeneruj unikalny, ekspercki temat posta na Instagramie (maks. 5 słów) dotycz
     openai_client.generate_image(image_prompt, image_path)
 
     # client.dump_settings("session.json")
-    instagram_client = InstagramClient()
     instagram_client.post_to_feed(image_path, f"{caption} #InteligentnaDieta")
     instagram_client.post_story_with_newest_post()
