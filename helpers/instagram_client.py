@@ -16,7 +16,7 @@ class InstagramClient:
 
         self.client = Client()
         self.client.challenge_code_handler = challenge_code_handler
-        self.client.set_proxy("http://170.106.196.226:13001")
+        # self.client.set_proxy("http://170.106.196.226:13001")
         # self.client.login(self.username, self.password)
         # print(f"Logged in as {self.username}")
         instagram_session = json.loads(os.getenv("INSTAGRAM_SESSION"))
