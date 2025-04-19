@@ -8,7 +8,7 @@ if __name__ == "__main__":
     instagram_client = InstagramClient()
     openai_client = OpenAIClient()
     topic_prompt = '''
-Wygeneruj unikalny, ekspercki temat posta na Instagramie (maks. 5 słów) dotyczący zdrowego odżywiania. Temat musi być konkretny, oparty na aktualnych badaniach i brzmieć jak od specjalisty z zakresu dietetyki lub medycyny. Unikaj ogólników (np. ‘zdrowa dieta’, ‘fit śniadanie’). Skup się na mniej oczywistych, ale merytorycznych aspektach żywienia, które zaciekawią świadomego odbiorcę. Styl: rzeczowy, naukowy, angażujący. Przykłady: ‘Wpływ omega-3 na mózg’, ‘Rola błonnika w mikrobiomie’, ‘Czy gluten szkodzi każdemu?’, ‘Mit detoksów sokowych obalony’, ‘Związek snu z insulinowrażliwością’.
+Jesteś mistrzem kreatywnego myślenia. Twój każdy pomyśł jest wyjątkowy i unikalny, choć niezawsze oczywisty. Wygeneruj temat posta na Instagramie (maks. 5 słów) dotyczący zdrowego życia, odżywiania, sportu lub współczesnych zagrożeń dla zdrowia. Temat możę być konkretny, oparty na aktualnych badaniach i brzmieć jak od specjalisty lub kompletnie luźny i bardziej meandrujący w kierunku filozofii i dywagacji. Unikaj banałów i skup się na mniej oczywistych, ale merytorycznych aspektach, które zaciekawią świadomego odbiorcę.
     '''
     topic = openai_client.generate_text(topic_prompt, temperature=1.2)
     print("Generated topic:", topic)
@@ -25,11 +25,11 @@ Wygeneruj unikalny, ekspercki temat posta na Instagramie (maks. 5 słów) dotycz
 
             jest profesjonalny, ale ludzki i przystępny,
 
-            zawiera wyważoną listę (np. 2–4 punktów) z konkretnymi informacjami,
+            może zawierać wyważoną listę (np. 2–4 punktów) z konkretnymi informacjami, jeśli temat na to pozwala,
 
-            korzysta z emoji tylko tam, gdzie naturalnie wspierają przekaz (nie dekoracyjnie),
+            korzysta z emoji, aleich nie nadużywa,
 
-            ma maksymalnie 600 znaków (bez hasztagów),
+            ma maksymalnie 1000 znaków (bez hasztagów),
 
             nie zaczyna się od słów „Oto” ani „Poznaj”.
 
